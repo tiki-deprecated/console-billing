@@ -1,0 +1,23 @@
+name = "refresh"
+main = "src/index.ts"
+account_id = "5c5263e05bb1e54242b1afb12a5c9259"
+
+routes = [
+  { pattern = "console.mytiki.com/api/latest/billing", zone_id = "7be31970110fa56b1f8e1fe915a8b938" },
+  { pattern = "console.mytiki.com/api/latest/billing/subscriptions", zone_id = "7be31970110fa56b1f8e1fe915a8b938" },
+  { pattern = "console.mytiki.com/api/latest/billing/checkout", zone_id = "7be31970110fa56b1f8e1fe915a8b938" }
+]
+
+compatibility_date = "2023-02-02"
+
+[vars]
+ORIGIN = "https://console.mytiki.com"
+BILLING_PAGE = "billing"
+
+STRIPE_PID_NU = "price_1MwYcVDveWor0wgFJZfsPAAs"
+STRIPE_PID_MAU = "price_1MwYogDveWor0wgFtobq28xO"
+
+L0_AUTH_DOMAIN = "https://auth.l0.mytiki.com"
+
+# The necessary secrets are:
+# - STRIPE_SK
