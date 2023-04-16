@@ -1,2 +1,2 @@
-# console-checkout
-Cloudflare worker to create secure checkout links
+# console-billing
+Cloudflare worker for console billing APIs
