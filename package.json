@@ -2,7 +2,7 @@
   "name": "console-checkout",
   "version": "1.0.0",
   "description": "Cloudflare worker for silent-refresh via secure headers",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "start": "wrangler dev --local",

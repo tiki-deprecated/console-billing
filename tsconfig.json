@@ -10,7 +10,8 @@
     "moduleResolution": "Node",
     "allowJs": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"],
