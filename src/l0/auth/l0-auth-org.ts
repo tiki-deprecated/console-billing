@@ -3,10 +3,11 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-interface L0AuthUser {
-  userId: string;
-  email: string;
+interface L0AuthOrg {
+  orgId: string;
+  billingId?: string;
   modified: Date;
   created: Date;
-  orgId: string;
+  users?: Array<string>;
+  apps?: Array<string>;
 }

@@ -18,7 +18,7 @@ export class Client {
     priceIds: Array<string>,
     tikiId: string,
     stripeId?: string
-  ): Promise<Response> {
+  ): Promise<string | null> {
     const session: Stripe.Response<Stripe.Checkout.Session> =
       await this.stripe.checkout.sessions.create({
         line_items: priceIds.map((id: string) => {
@@ -34,19 +34,15 @@ export class Client {
           description: "TIKI PRO",
         },
       });
-    if (session.url != null) return Response.redirect(session.url, 302);
-    else
-      throw Response.json({ message: "Unprocessable Entity" }, { status: 422 });
+    return session.url;
   }
 
-  async portal(stripeId: string): Promise<Response> {
+  async portal(stripeId: string): Promise<string | null> {
     const session: Stripe.Response<Stripe.BillingPortal.Session> =
       await this.stripe.billingPortal.sessions.create({
         customer: stripeId,
       });
-    if (session.url != null) return Response.redirect(session.url, 302);
-    else
-      throw Response.json({ message: "Unprocessable Entity" }, { status: 422 });
+    return session.url;
   }
 
   async subscriptions(

@@ -28,30 +28,22 @@ export default {
         );
 
         if (pathName === "/api/latest/billing") {
-          return handleBilling(
-            stripe,
-            await l0Auth.user(request.headers.get("Authorization") ?? "")
-          );
+          return handleBilling(stripe, l0Auth, request, env);
         } else if (pathName === "/api/latest/billing/subscriptions") {
-          return handleSubscriptions(
-            stripe,
-            await l0Auth.user(request.headers.get("Authorization") ?? ""),
-            env
-          );
+          return handleSubscriptions(stripe, l0Auth, request, env);
         } else if (pathName === "/api/latest/billing/checkout") {
-          return handleCheckout(
-            stripe,
-            await l0Auth.user(request.headers.get("Authorization") ?? ""),
-            env
-          );
+          return handleCheckout(stripe, l0Auth, request, env);
         }
       }
 
-      return new Response(null, { status: 405 });
+      return new Response(null, {
+        status: 405,
+        headers: getCorsHeaders(env.ORIGIN),
+      });
     } catch (error: unknown) {
       if (error instanceof Response) return error;
       else {
-        return Response.json({ message: String(error) }, { status: 500 });
+        return Response.json({ message: String(error) }, { status: 500, headers: getCorsHeaders(env.ORIGIN) });
       }
     }
   },
@@ -69,47 +61,86 @@ function guardCORS(request: Request, env: Env): void {
 function getCorsHeaders(origin: string): Record<string, string> {
   return {
     "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "OPTIONS, GET",
+    "Access-Control-Allow-Methods": "GET",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Headers": "Authorization, Content-Type, Accept",
   };
 }
 
 async function handleBilling(
   stripe: Client,
-  user: L0AuthUser
+  l0Auth: L0Auth,
+  request: Request,
+  env: Env
 ): Promise<Response> {
-  if (user.billingId != null) return stripe.portal(user.billingId);
-  else
+  const authorization = request.headers.get("Authorization") ?? "";
+  const user = await l0Auth.user(authorization);
+  const org = await l0Auth.org(authorization, user.orgId);
+  if (org.billingId != null) {
+    const url = await stripe.portal(org.billingId);
+    if (url != null) {
+      return new Response(JSON.stringify({ url }), {
+        status: 200,
+        headers: getCorsHeaders(env.ORIGIN),
+      });
+    } else {
+      return Response.json(
+        { message: "Unprocessable Entity" },
+        { status: 422, headers: getCorsHeaders(env.ORIGIN) }
+      );
+    }
+  } else
     return Response.json(
       { message: "No billingId", help: "Try /checkout" },
-      { status: 404 }
+      { status: 404, headers: getCorsHeaders(env.ORIGIN) }
     );
 }
 
 async function handleSubscriptions(
   stripe: Client,
-  user: L0AuthUser,
+  l0Auth: L0Auth,
+  request: Request,
   env: Env
 ): Promise<Response> {
-  if (user.billingId != null) {
-    const subs = await stripe.subscriptions(user.billingId);
+  const authorization = request.headers.get("Authorization") ?? "";
+  const user = await l0Auth.user(authorization);
+  const org = await l0Auth.org(authorization, user.orgId);
+  if (org.billingId != null) {
+    const subs = await stripe.subscriptions(org.billingId);
     return Response.json(subs, {
+      status: 200,
       headers: getCorsHeaders(env.ORIGIN),
     });
   } else
     return Response.json(
       { message: "No billingId", help: "Try /checkout" },
-      { status: 404 }
+      { status: 404, headers: getCorsHeaders(env.ORIGIN) }
     );
 }
 
 async function handleCheckout(
   stripe: Client,
-  user: L0AuthUser,
+  l0Auth: L0Auth,
+  request: Request,
   env: Env
 ): Promise<Response> {
-  return stripe.checkout(
+  const authorization = request.headers.get("Authorization") ?? "";
+  const user = await l0Auth.user(authorization);
+  const org = await l0Auth.org(authorization, user.orgId);
+  const url = await stripe.checkout(
     [env.STRIPE_PID_MAU, env.STRIPE_PID_NU],
-    user.userId,
-    user.billingId
+    user.orgId,
+    org.billingId
   );
+  if (url != null) {
+    return new Response(JSON.stringify({ url }), {
+      status: 200,
+      headers: getCorsHeaders(env.ORIGIN),
+    });
+  } else {
+    return Response.json(
+      { message: "Unprocessable Entity" },
+      { status: 422, headers: getCorsHeaders(env.ORIGIN) }
+    );
+  }
 }
