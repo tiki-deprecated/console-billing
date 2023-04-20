@@ -14,8 +14,8 @@ compatibility_date = "2023-02-02"
 ORIGIN = "https://console.mytiki.com"
 BILLING_PAGE = "billing"
 
-STRIPE_PID_NU = "price_1MwYcVDveWor0wgFJZfsPAAs"
-STRIPE_PID_MAU = "price_1MwYogDveWor0wgFtobq28xO"
+STRIPE_PID_NU = "price_1MymStDveWor0wgFZVmzo237"
+STRIPE_PID_MAU = "price_1MymUpDveWor0wgFNfTbjTuD"
 
 L0_AUTH_DOMAIN = "https://auth.l0.mytiki.com"
 
