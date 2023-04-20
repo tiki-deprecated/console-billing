@@ -21,4 +21,16 @@ export class L0Auth {
     if (response.status === 200) return response.json();
     else throw response;
   }
+
+  async org(authorization: string, orgId: string): Promise<L0AuthOrg> {
+    const response = await fetch(`${this.url}/api/latest/org/${orgId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authorization,
+      },
+    });
+    if (response.status === 200) return response.json();
+    else throw response;
+  }
 }

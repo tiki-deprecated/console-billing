@@ -1,4 +1,4 @@
-name = "refresh"
+name = "billing"
 main = "src/index.ts"
 account_id = "5c5263e05bb1e54242b1afb12a5c9259"
 
