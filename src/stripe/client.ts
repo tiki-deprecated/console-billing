@@ -15,15 +15,13 @@ export class Client {
   }
 
   async checkout(
-    priceIds: Array<string>,
+    lineItems: Stripe.Checkout.SessionCreateParams.LineItem[],
     tikiId: string,
     stripeId?: string
   ): Promise<string | null> {
     const session: Stripe.Response<Stripe.Checkout.Session> =
       await this.stripe.checkout.sessions.create({
-        line_items: priceIds.map((id: string) => {
-          return { price: id };
-        }),
+        line_items: lineItems,
         mode: "subscription",
         success_url: this.redirect,
         cancel_url: this.redirect,
@@ -45,14 +43,22 @@ export class Client {
     return session.url;
   }
 
-  async subscriptions(
-    stripeId: string
-  ): Promise<Stripe.Subscription | undefined> {
+  async subscriptions(stripeId: string): Promise<Stripe.Subscription[]> {
     const subs: Stripe.ApiList<Stripe.Subscription> =
       await this.stripe.subscriptions.list({
         customer: stripeId,
         status: "active",
       });
-    return subs.data.pop();
+    return subs.data;
+  }
+
+  async subscribe(
+    items: Stripe.SubscriptionCreateParams.Item[],
+    stripeId: string
+  ): Promise<Stripe.Subscription> {
+    return await this.stripe.subscriptions.create({
+      customer: stripeId,
+      items,
+    });
   }
 }

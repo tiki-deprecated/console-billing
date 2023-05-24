@@ -13,11 +13,16 @@ compatibility_date = "2023-02-02"
 [vars]
 ORIGIN = "https://console.mytiki.com"
 BILLING_PAGE = "billing"
-
-STRIPE_PID_NU = "price_1MymStDveWor0wgFZVmzo237"
-STRIPE_PID_MAU = "price_1MymUpDveWor0wgFNfTbjTuD"
-
 L0_AUTH_DOMAIN = "https://auth.l0.mytiki.com"
+
+STRIPE_IGT_PRICE_ID = ""
+STRIPE_IGT_PRODUCT_ID = ""
+
+STRIPE_LMSM_PRICE_ID = ""
+STRIPE_LMSM_PRODUCT_ID = ""
+
+STRIPE_LMSMAO_PRICE_ID = ""
+STRIPE_LMSMAO_PRODUCT_ID = ""
 
 # The necessary secrets are:
 # - STRIPE_SK

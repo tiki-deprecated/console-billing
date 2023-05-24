@@ -43,7 +43,10 @@ export default {
     } catch (error: unknown) {
       if (error instanceof Response) return error;
       else {
-        return Response.json({ message: String(error) }, { status: 500, headers: getCorsHeaders(env.ORIGIN) });
+        return Response.json(
+          { message: String(error) },
+          { status: 500, headers: getCorsHeaders(env.ORIGIN) }
+        );
       }
     }
   },
@@ -124,14 +127,43 @@ async function handleCheckout(
   request: Request,
   env: Env
 ): Promise<Response> {
+  const params = new URL(request.url).searchParams;
   const authorization = request.headers.get("Authorization") ?? "";
   const user = await l0Auth.user(authorization);
   const org = await l0Auth.org(authorization, user.orgId);
-  const url = await stripe.checkout(
-    [env.STRIPE_PID_MAU, env.STRIPE_PID_NU],
-    user.orgId,
-    org.billingId
-  );
+
+  let lineItems;
+  const productId = params.get("product");
+  if (productId === env.STRIPE_LMSMAO_PRODUCT_ID) {
+    await stripe.subscribe(
+      [
+        {
+          price: env.STRIPE_LMSMAO_PRICE_ID,
+          quantity: 0,
+        },
+      ],
+      org.billingId ?? ""
+    );
+    return new Response(null, {
+      status: 201,
+      headers: getCorsHeaders(env.ORIGIN),
+    });
+  } else if (productId === env.STRIPE_LMSM_PRODUCT_ID) {
+    lineItems = [{ price: env.STRIPE_LMSM_PRICE_ID, quantity: 1 }];
+  } else {
+    lineItems = [
+      {
+        price: env.STRIPE_IGT_PRICE_ID,
+        quantity: 1,
+        adjustable_quantity: {
+          enabled: true,
+          minimum: 1,
+        },
+      },
+    ];
+  }
+
+  const url = await stripe.checkout(lineItems, user.orgId, org.billingId);
   if (url != null) {
     return new Response(JSON.stringify({ url }), {
       status: 200,
