@@ -14,13 +14,13 @@ ORIGIN = "https://console.mytiki.com"
 BILLING_PAGE = "billing"
 L0_AUTH_DOMAIN = "https://auth.l0.mytiki.com"
 
-STRIPE_IGT_PRICE_ID = "price_1NBUlYDveWor0wgFlUS4R73K"
+STRIPE_IGT_PRICE_ID = "price_1NBX9lDveWor0wgFd9dFH8Sl"
 STRIPE_IGT_PRODUCT_ID = "prod_NxPayH6ltybQVV"
 
 STRIPE_LMSM_PRICE_ID = "price_1NBV5fDveWor0wgFKjcWHC5N"
 STRIPE_LMSM_PRODUCT_ID = "prod_NxPvzVRz2wXzPx"
 
-STRIPE_LMSMAO_PRICE_ID = "price_1NBV83DveWor0wgFB24pwrT3"
+STRIPE_LMSMAO_PRICE_ID = "price_1NBXCxDveWor0wgFa71FZFkn"
 STRIPE_LMSMAO_PRODUCT_ID = "prod_NxPxbsvCIhGm0I"
 
 # The necessary secrets are:
