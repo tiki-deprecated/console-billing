@@ -4,8 +4,7 @@ account_id = "5c5263e05bb1e54242b1afb12a5c9259"
 
 routes = [
   { pattern = "console.mytiki.com/api/latest/billing", zone_id = "7be31970110fa56b1f8e1fe915a8b938" },
-  { pattern = "console.mytiki.com/api/latest/billing/subscriptions", zone_id = "7be31970110fa56b1f8e1fe915a8b938" },
-  { pattern = "console.mytiki.com/api/latest/billing/checkout", zone_id = "7be31970110fa56b1f8e1fe915a8b938" }
+  { pattern = "console.mytiki.com/api/latest/billing/*", zone_id = "7be31970110fa56b1f8e1fe915a8b938" },
 ]
 
 compatibility_date = "2023-02-02"
