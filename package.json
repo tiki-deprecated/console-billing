@@ -36,7 +36,7 @@
   "homepage": "https://github.com/tiki/console-billing#readme",
   "devDependencies": {
     "@babel/core": "^7.21.4",
-    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-env": "^7.22.5",
     "@cloudflare/workers-types": "^4.20230404.0",
     "@types/jest": "^29.5.0",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
